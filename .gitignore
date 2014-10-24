@@ -1,3 +1,5 @@
+local/
+old/
 /blib/
 /.build/
 _build/
