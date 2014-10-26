@@ -24,16 +24,18 @@ has 'client' => (
     },
 );
 
-our $AUTOLOAD;
+sub BUILD {
+    my ($self) = @_;
 
-## no critic (Subroutines::RequireArgUnpacking)
-## no critic (ClassHierarchies::ProhibitAutoloading)
-sub AUTOLOAD {
-    my ( $method, $self, %args ) = ( $AUTOLOAD, @_ );
+    no strict 'refs';    ## no critic(TestingAndDebugging::ProhibitNoStrict)
+    foreach my $method ( map { $_->name } $self->client->operations ) {
+        *{$method} = sub {
+            my ( $this, %args ) = @_;
+            return $this->client->call( $method, %args );
+        };
+    }
 
-    $method =~ s/.*:://g;
-
-    return $self->client->call( $method, %args );
+    return;
 }
 
 1;
