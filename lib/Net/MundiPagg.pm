@@ -42,3 +42,6 @@ sub BUILD {
 
 #ABSTRACT: Net::MundiPagg - Documentation coming soon :)
 
+=method BUILD
+
+Private method
